@@ -24,7 +24,10 @@ char Temp [APP_TX_DATA_SIZE];
 void USBD_CDC_DataRecivedCallback(char *rx)
 {
   CmdLineMainMenu(rx, Temp);
-  printf(rx);
+  int respLen=strlen(Temp);
+
+  memcpy(Temp + respLen, (uint8_t[]) { '\n', 0x00 }, 2 );
+
   CDC_Transmit_FS((uint8_t*)Temp, strlen(Temp));
 }
 
@@ -68,14 +71,14 @@ void CmdLineMainMenu(char *request, char* response)
      int i32;
 
      sscanf(request,"#%s %s %s", node, cmd, param);
-     if(!strcmp(cmd, "READ:VOLT?"))
+     if(!strcmp(cmd, "MEAS:VOLT?"))
      {
         if(IsBroadcast(node))
           sprintf(response, CMDLINE_CANNOT_BROADCAST_ERROR, cmd);
         else
           sprintf(response, "%f", Device.Vcells[GetNodeAddres(node)].CVmeas); 
      }
-     else if(!strcmp(cmd, "READ:CURR?"))
+     else if(!strcmp(cmd, "MEAS:CURR?"))
      {
         if(IsBroadcast(node))
           sprintf(response, CMDLINE_CANNOT_BROADCAST_ERROR, cmd);
