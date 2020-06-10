@@ -98,15 +98,15 @@ uint8_t CanNetTask(CanNet_Type *context)
 return status;
 }
 
-__weak uint8_t CanNetWriteMsgLowLevel(uint32_t arbId, uint8_t *data, size_t size)
-{
-  return CANNET_NOT_IMPLEMENTED;
-}
+//__weak uint8_t CanNetWriteMsgLowLevel(uint32_t arbId, uint8_t *data, size_t size)
+//{
+//  return CANNET_NOT_IMPLEMENTED;
+//}
 
-__weak uint8_t CanNetLowLevelTxMailboxIsEmpty(void)
-{
-  return CANNET_NOT_IMPLEMENTED;
-}
+//__weak uint8_t CanNetLowLevelTxMailboxIsEmpty(void)
+//{
+//  return CANNET_NOT_IMPLEMENTED;
+//}
 
 uint8_t CanNetReadMsgLowLevel(CanNet_Type *context, uint32_t arbId, uint8_t *data, size_t size)
 {

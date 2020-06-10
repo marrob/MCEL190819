@@ -92,6 +92,13 @@ void CmdLineMainMenu(char *request, char* response)
         else
           sprintf(response, "%d",Device.Vcells[GetNodeAddres(node)].Range);
      }
+     else if (!strcmp(cmd, "READ:UPTIME?"))
+     {
+       if(IsBroadcast(node))
+         sprintf(response, CMDLINE_CANNOT_BROADCAST_ERROR, cmd);
+       else
+         sprintf(response, "%ld",Device.Vcells[GetNodeAddres(node)].UpTimeSec);
+     }
      else if(!strcmp(cmd, "READ:C-OFFSET?"))
      { 
         if(IsBroadcast(node))

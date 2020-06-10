@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include "usb_device.h"
 #include "usbd_cdc_if.h"
+#include "led.h"
 
 
 
@@ -39,6 +40,8 @@ CAN_HandleTypeDef hcan1;
 LiveLED_HnadleTypeDef LiveLed;
 DebugStateTypeDef DebugState;
 DeviceTypeDef Device;
+LedHandle_Type        hLed;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -53,6 +56,23 @@ void DebugPrint(char *str);
 void TestMsgSenderTask(void);
 void BusTermOn(void);
 void BusTermOff(void);
+uint8_t CanNetLowLevelTxMailboxIsEmpty(void);
+void LedRedOn(void);
+void LedRedOff(void);
+void LedGreenOn(void);
+void LedGreenOff(void);
+void LedOrangeOn(void);
+void LedOrangeOff(void);
+
+#define HMI_LED_ORANGE  0
+#define HMI_LED_GREEN   1
+#define HMI_LED_RED     2
+
+LedItem_Type LedList[] = {
+  { HMI_LED_ORANGE,   &LedOrangeOn,    &LedOrangeOff    },
+  { HMI_LED_GREEN,    &LedGreenOn,     &LedGreenOff,    },
+  { HMI_LED_RED,      &LedRedOn,       &LedRedOff,      },
+};
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -209,8 +229,16 @@ int main(void)
   LiveLedInit(&LiveLed);
 
 
- CanNetInit(&Device.CanNet, NODE_PC, NULL, Messages, CanNetMessagesCount());
 
+  CanNetInit(&Device.CanNet, NODE_PC, 0, Messages, CanNetMessagesCount());
+
+  /*** Leds ***/
+  hLed.pLedTable = LedList;
+  hLed.Records = sizeof(LedList)/sizeof(LedItem_Type);
+  LedInit(&hLed);
+  LedOn(&hLed, HMI_LED_GREEN);
+  LedOn(&hLed, HMI_LED_ORANGE);
+  LedOn(&hLed, HMI_LED_RED);
   /* USER CODE END 2 */
  
  
@@ -224,7 +252,7 @@ int main(void)
     TestMsgSenderTask();
     CanNetTask(&Device.CanNet);
     USBD_CDC_Task();
-
+    LedTask(&hLed);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -405,6 +433,33 @@ void LiveLedOff(void)
   HAL_GPIO_WritePin(LIVE_LED_GPIO_Port, LIVE_LED_Pin, GPIO_PIN_RESET);
 }
 
+void LedRedOn(void)
+{
+  HAL_GPIO_WritePin(LED_R_GPIO_Port, LED_R_Pin,GPIO_PIN_SET );
+}
+void LedRedOff(void)
+{
+  HAL_GPIO_WritePin(LED_R_GPIO_Port, LED_R_Pin, GPIO_PIN_RESET);
+}
+
+void LedOrangeOn(void)
+{
+  HAL_GPIO_WritePin(LED_Y_GPIO_Port, LED_Y_Pin, GPIO_PIN_RESET);
+}
+void LedOrangeOff(void)
+{
+  HAL_GPIO_WritePin(LED_Y_GPIO_Port, LED_Y_Pin, GPIO_PIN_SET);
+}
+
+void LedGreenOn(void)
+{
+  HAL_GPIO_WritePin(LED_G_GPIO_Port, LED_G_Pin, GPIO_PIN_SET);
+}
+void LedGreenOff(void)
+{
+  HAL_GPIO_WritePin(LED_G_GPIO_Port, LED_G_Pin, GPIO_PIN_RESET);
+}
+
 
 /* TERM ---------------------------------------------------------------------*/
 void BusTermOn(void)
@@ -414,6 +469,15 @@ void BusTermOn(void)
 void BusTermOff(void)
 {
   HAL_GPIO_WritePin(TERM_GPIO_Port, TERM_Pin, GPIO_PIN_RESET);
+}
+
+/* CANNET ---------------------------------------------------------------------*/
+uint8_t CanNetLowLevelTxMailboxIsEmpty(void)
+{
+  if(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) != 0)
+    return CANNET_EMPTY;
+  else
+    return CANNET_FULL;
 }
 
 

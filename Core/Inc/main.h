@@ -150,6 +150,7 @@ void Error_Handler(void);
 /* USER CODE BEGIN EFP */
 extern DeviceTypeDef Device;
 void CmdLineMainMenu(char *request, char* response);
+
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/

@@ -30,7 +30,7 @@ CanNetMessageItem_Type Messages[] =
   { "MSG_MCEL_STA_CV",     MSG_MCEL_STA_CV,   NODE_MCEL,    0,        0,           &SIG_MCEL_CV_STATUS_Changed, &VcellDevTemp.CV,               CANNET_BOOL,        },
   { "MSG_MCEL_STA_OE",     MSG_MCEL_STA_OE,   NODE_MCEL,    0,        0,           &SIG_MCEL_OE_STATUS_Changed, &VcellDevTemp.OE,               CANNET_BOOL,        },
   { "MSG_MCEL_VER",        MSG_MCEL_VER,      NODE_MCEL,    0,        0,           &SIG_MCEL_VERSION_Changed,   &VcellDevTemp.Version,          CANNET_U64,         },
-  { "MSG_MCEL_LIVE",       MSG_MCEL_LIVE,     NODE_MCEL,    0,        0,           &SIG_MCEL_UPTIME_Changed,    &VcellDevTemp.UpTimeSec,        CANNET_U32,         },
+  { "MSG_MCEL_LIVE",       MSG_MCEL_LIVE,     NODE_MCEL,    0,        0,           &SIG_MCEL_UPTIME_Changed,    &VcellDevTemp.UpTimeSec,        CANNET_U8,         },
 
   { "MSG_PC_CV",           MSG_PC_CV,         NODE_PC,      0,        0,           NULL,                        NULL,                           CANNET_FLOAT        },
   { "MSG_PC_CC",           MSG_PC_CC,         NODE_PC,      0,        0,           NULL,                        NULL,                           CANNET_FLOAT        },
@@ -74,7 +74,7 @@ static void SIG_MCEL_C_MEAS_Changed (uint8_t node)
 
 static void SIG_MCEL_C_RANGE_Changed (uint8_t node)
 {
-  Device.Vcells[node].Range = VcellDevTemp.CCmeas; 
+  Device.Vcells[node].Range = VcellDevTemp.Range;
 }
 
 static void SIG_MCEL_OE_STATUS_Changed (uint8_t node)

@@ -310,6 +310,7 @@ uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len)
   if (hcdc->TxState != 0){
     return USBD_BUSY;
   }
+  Device.UART.TxCounter++;
   USBD_CDC_SetTxBuffer(&hUsbDeviceFS, Buf, Len);
   result = USBD_CDC_TransmitPacket(&hUsbDeviceFS);
   /* USER CODE END 7 */
@@ -321,6 +322,7 @@ void USBD_CDC_Task(void)
 {
   if(DataReceivedFlag)
   {
+    Device.UART.RxCounter++;
     DataReceivedFlag = 0;
     USBD_CDC_DataRecivedCallback((char*)RxBuffer);
     RxBuffPtr = 0;
