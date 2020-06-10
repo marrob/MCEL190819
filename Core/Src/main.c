@@ -225,8 +225,6 @@ int main(void)
   LiveLed.HalfPeriodTimeMs = 500;
   LiveLedInit(&LiveLed);
 
-
-
   CanNetInit(&Device.CanNet, NODE_PC, 0, Messages, CanNetMessagesCount());
 
   /*** Leds ***/

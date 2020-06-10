@@ -23,12 +23,26 @@
 char Temp [APP_TX_DATA_SIZE];
 void USBD_CDC_DataRecivedCallback(char *rx)
 {
+  static uint8_t toogle;
+
+
   CmdLineMainMenu(rx, Temp);
   int respLen=strlen(Temp);
 
   memcpy(Temp + respLen, (uint8_t[]) { '\n', 0x00 }, 2 );
 
   CDC_Transmit_FS((uint8_t*)Temp, strlen(Temp));
+
+  if(toogle)
+  {
+    LedOn(&hLed, HMI_LED_ORANGE);
+    toogle = 0;
+  }
+  else
+  {
+    LedOff(&hLed, HMI_LED_ORANGE);
+    toogle = 1;
+  }
 }
 
 

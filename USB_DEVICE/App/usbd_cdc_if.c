@@ -226,20 +226,17 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
   /* 6      | bDataBits  |   1   | Number Data bits (5, 6, 7, 8 or 16).          */
   /*******************************************************************************/
     case CDC_SET_LINE_CODING:
-    {
-
       break;
-    }
 
     case CDC_GET_LINE_CODING:
     {
-      LedOn(&hLed, HMI_LED_ORANGE);
       break;
     }
 
     case CDC_SET_CONTROL_LINE_STATE:
     {
-      LedOff(&hLed, HMI_LED_ORANGE);
+
+
       break;
     }
 
