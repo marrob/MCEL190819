@@ -35,6 +35,7 @@ extern "C" {
 #include "LiveLed.h"
 #include "cannet.h"
 #include "cannetdb.h"
+#include "led.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -149,6 +150,7 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
 extern DeviceTypeDef Device;
+extern LedHandle_Type hLed;
 void CmdLineMainMenu(char *request, char* response);
 
 /* USER CODE END EFP */
@@ -158,12 +160,12 @@ void CmdLineMainMenu(char *request, char* response);
 #define TERM_GPIO_Port GPIOB
 #define LIVE_LED_Pin GPIO_PIN_15
 #define LIVE_LED_GPIO_Port GPIOB
-#define LED_R_Pin GPIO_PIN_6
+#define LED_R_Pin GPIO_PIN_12
 #define LED_R_GPIO_Port GPIOC
-#define LED_Y_Pin GPIO_PIN_7
-#define LED_Y_GPIO_Port GPIOC
-#define LED_G_Pin GPIO_PIN_8
-#define LED_G_GPIO_Port GPIOC
+#define LED_Y_Pin GPIO_PIN_4
+#define LED_Y_GPIO_Port GPIOB
+#define LED_G_Pin GPIO_PIN_5
+#define LED_G_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 /* Generic  -------------------------------------------------------------------*/
   #define DEVICE_NAME             "MCAN190529"    /*!< Eszk�z neve pl.:MDIO130204*/
@@ -174,6 +176,10 @@ void CmdLineMainMenu(char *request, char* response);
   #define DEVICE_PCB_SIZE         sizeof(DEVICE_PCB)
   #define DEVICE_MNF              "KONVOLUCIO"
   #define DEVICE_MNF_SIZE         sizeof(DEVICE_MNF)
+
+  #define HMI_LED_ORANGE  0
+  #define HMI_LED_GREEN   1
+  #define HMI_LED_RED     2
 
 /* USER CODE END Private defines */
 

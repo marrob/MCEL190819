@@ -5,14 +5,14 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
+#include "usb_device.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
 #include "usb_device.h"
 #include "usbd_cdc_if.h"
-#include "led.h"
+
 
 
 
@@ -40,7 +40,7 @@ CAN_HandleTypeDef hcan1;
 LiveLED_HnadleTypeDef LiveLed;
 DebugStateTypeDef DebugState;
 DeviceTypeDef Device;
-LedHandle_Type        hLed;
+LedHandle_Type hLed;
 
 /* USER CODE END PV */
 
@@ -64,9 +64,6 @@ void LedGreenOff(void);
 void LedOrangeOn(void);
 void LedOrangeOff(void);
 
-#define HMI_LED_ORANGE  0
-#define HMI_LED_GREEN   1
-#define HMI_LED_RED     2
 
 LedItem_Type LedList[] = {
   { HMI_LED_ORANGE,   &LedOrangeOn,    &LedOrangeOff    },
@@ -237,8 +234,6 @@ int main(void)
   hLed.Records = sizeof(LedList)/sizeof(LedItem_Type);
   LedInit(&hLed);
   LedOn(&hLed, HMI_LED_GREEN);
-  LedOn(&hLed, HMI_LED_ORANGE);
-  LedOn(&hLed, HMI_LED_RED);
   /* USER CODE END 2 */
  
  
@@ -387,28 +382,28 @@ static void MX_GPIO_Init(void)
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
-  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOC_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, TERM_Pin|LIVE_LED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, TERM_Pin|LIVE_LED_Pin|LED_Y_Pin|LED_G_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, LED_R_Pin|LED_Y_Pin|LED_G_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LED_R_GPIO_Port, LED_R_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : TERM_Pin LIVE_LED_Pin */
-  GPIO_InitStruct.Pin = TERM_Pin|LIVE_LED_Pin;
+  /*Configure GPIO pins : TERM_Pin LIVE_LED_Pin LED_Y_Pin LED_G_Pin */
+  GPIO_InitStruct.Pin = TERM_Pin|LIVE_LED_Pin|LED_Y_Pin|LED_G_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : LED_R_Pin LED_Y_Pin LED_G_Pin */
-  GPIO_InitStruct.Pin = LED_R_Pin|LED_Y_Pin|LED_G_Pin;
+  /*Configure GPIO pin : LED_R_Pin */
+  GPIO_InitStruct.Pin = LED_R_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+  HAL_GPIO_Init(LED_R_GPIO_Port, &GPIO_InitStruct);
 
 }
 
@@ -444,11 +439,11 @@ void LedRedOff(void)
 
 void LedOrangeOn(void)
 {
-  HAL_GPIO_WritePin(LED_Y_GPIO_Port, LED_Y_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LED_Y_GPIO_Port, LED_Y_Pin,GPIO_PIN_SET );
 }
 void LedOrangeOff(void)
 {
-  HAL_GPIO_WritePin(LED_Y_GPIO_Port, LED_Y_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(LED_Y_GPIO_Port, LED_Y_Pin, GPIO_PIN_RESET);
 }
 
 void LedGreenOn(void)
