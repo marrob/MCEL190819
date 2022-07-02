@@ -323,7 +323,7 @@ uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len)
 }
 
 /* USER CODE BEGIN PRIVATE_FUNCTIONS_IMPLEMENTATION */
-void USBD_CDC_Task(void)
+void CDC_Task_FS(void)
 {
   if(DataReceivedFlag)
   {

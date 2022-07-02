@@ -244,7 +244,7 @@ int main(void)
     TestVcpTask();
     TestMsgSenderTask();
     CanNetTask(&Device.CanNet);
-    USBD_CDC_Task();
+    CDC_Task_FS();
     LedTask(&hLed);
     /* USER CODE END WHILE */
 

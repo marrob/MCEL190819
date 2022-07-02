@@ -110,7 +110,7 @@ uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len);
 
 /* USER CODE BEGIN EXPORTED_FUNCTIONS */
 __weak void USBD_CDC_DataRecivedCallback(char *line);
-void USBD_CDC_Task(void);
+void CDC_Task_FS(void);
 /* USER CODE END EXPORTED_FUNCTIONS */
 
 /**
